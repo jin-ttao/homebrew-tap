@@ -34,6 +34,10 @@ cask "resumer" do
 
   binary "resumer"
 
-  # No zap stanza required
+  postflight do
+    if system_command("/usr/bin/xattr", args: ["-h"]).exit_status == 0
+      system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/resumer"]
+    end
+  end
 
 end
